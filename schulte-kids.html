@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Таблица Шульте</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f0f7ff;color:#1a1a2e;font-family:'Nunito',sans-serif;min-height:100vh;padding:16px;display:flex;justify-content:center}
+.wrap{width:100%;max-width:500px}
+
+.logo{font-size:2rem;font-weight:900;color:#3b5bdb;letter-spacing:1px}
+.logo span{color:#f03e3e}
+.sub{color:#74c0fc;font-size:0.72rem;font-weight:700;letter-spacing:2px;margin-bottom:20px}
+.toprow{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.topbtns{display:flex;gap:8px;align-items:center}
+
+.sec{margin-bottom:18px}
+.lbl{color:#868e96;font-size:0.68rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.chip{padding:10px 4px;background:#fff;border:2px solid #dee2e6;border-radius:12px;color:#868e96;font-size:0.72rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.chip.on{background:#e7f5ff;border-color:#339af0;color:#1971c2}
+
+.modes{display:flex;flex-direction:column;gap:8px}
+.mchip{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border:2px solid #dee2e6;border-radius:14px;cursor:pointer;width:100%;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:all .2s}
+.mchip.on{background:#fff9db;border-color:#fcc419}
+.mchip .ico{font-size:1.3rem;min-width:36px;text-align:center}
+.mchip .mt{color:#495057;font-size:0.85rem;font-weight:800;font-family:'Nunito',sans-serif}
+.mchip.on .mt{color:#e67700}
+.mchip .md{color:#adb5bd;font-size:0.7rem;font-weight:700;margin-top:2px;font-family:'Nunito',sans-serif}
+
+input{width:100%;padding:13px 16px;background:#fff;border:2px solid #dee2e6;border-radius:14px;color:#1a1a2e;font-size:1rem;font-family:'Nunito',sans-serif;font-weight:700;outline:none;transition:border .2s;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+input:focus{border-color:#339af0}
+
+.btn{display:block;width:100%;padding:15px;background:linear-gradient(135deg,#339af0,#3b5bdb);border:none;border-radius:14px;color:#fff;font-size:1.05rem;font-weight:900;cursor:pointer;letter-spacing:1px;margin-top:8px;font-family:'Nunito',sans-serif;box-shadow:0 4px 14px rgba(59,91,219,.3);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn2{display:block;width:100%;padding:12px;background:#fff;border:2px solid #dee2e6;border-radius:14px;color:#868e96;font-size:0.85rem;font-weight:800;cursor:pointer;margin-top:8px;font-family:'Nunito',sans-serif;transition:all .2s}
+.btn-sm{background:#fff;border:2px solid #dee2e6;color:#495057;padding:8px 14px;border-radius:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.btn-rules{background:#fff9db;border:2px solid #fcc419;color:#e67700;padding:8px 14px;border-radius:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:all .2s}
+
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:#fff;border-radius:20px;padding:24px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:popIn .3s;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:1.4rem;font-weight:900;color:#3b5bdb;margin-bottom:16px;text-align:center}
+.rule-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;background:#f8f9fa;border-radius:12px;padding:12px 14px}
+.rule-num{background:linear-gradient(135deg,#339af0,#3b5bdb);color:#fff;font-weight:900;font-size:0.85rem;min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.rule-text{color:#495057;font-size:0.85rem;font-weight:700;line-height:1.5}
+.rule-text b{color:#1a1a2e}
+.modes-legend{background:#f0f7ff;border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.mleg-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.mleg-row:last-child{margin-bottom:0}
+.tip-box{background:#fff0f6;border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.modal-close{width:100%;padding:13px;background:linear-gradient(135deg,#339af0,#3b5bdb);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif}
+
+/* Game */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.timer{font-weight:900;font-size:1.9rem;color:#ced4da;font-family:'Nunito',sans-serif;letter-spacing:1px}
+.timer.run{color:#3b5bdb}
+.pgbar{height:8px;background:#e9ecef;border-radius:8px;margin-bottom:12px;overflow:hidden}
+.pgfill{height:100%;background:linear-gradient(90deg,#74c0fc,#3b5bdb);border-radius:8px;transition:width .3s}
+.hint{text-align:center;margin-bottom:12px;color:#868e96;font-size:0.8rem;font-weight:700;min-height:24px;background:#fff;border-radius:12px;padding:8px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.hint b{color:#3b5bdb;font-size:1.05rem}
+.grid{display:grid;gap:6px;margin-bottom:12px}
+.cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-weight:900;border:2px solid #dee2e6;border-radius:12px;cursor:pointer;background:#fff;color:#343a40;transition:all .15s;user-select:none;font-family:'Nunito',sans-serif;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.cell:hover:not(.done):not(.bad){background:#e7f5ff;border-color:#74c0fc;transform:scale(1.04)}
+.cell.let{color:#7950f2}
+.cell.done{background:#ebfbee;border-color:#8ce99a;color:#2f9e44;cursor:default;transform:scale(.97)}
+.cell.bad{background:#fff5f5;border-color:#ff8787;color:#fa5252;animation:shake .4s}
+
+.resbox{background:#fff;border:2px solid #dee2e6;border-radius:16px;padding:24px;text-align:center;margin-bottom:14px;box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.resbig{font-weight:900;font-size:3rem;color:#3b5bdb;letter-spacing:2px}
+.ok{text-align:center;color:#2f9e44;padding:12px;background:#ebfbee;border:2px solid #8ce99a;border-radius:12px;margin-bottom:8px;font-size:0.85rem;font-weight:800}
+.stars{font-size:2rem;margin-bottom:6px;letter-spacing:4px}
+
+.lbtable{background:#fff;border:2px solid #dee2e6;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.lbhead{display:grid;grid-template-columns:40px 1fr 90px 70px;padding:10px 14px;border-bottom:2px solid #f1f3f5;color:#adb5bd;font-size:0.62rem;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.lbrow{display:grid;grid-template-columns:40px 1fr 90px 70px;padding:12px 14px;border-bottom:1px solid #f1f3f5;align-items:center}
+.lbrow.top1{background:#fff9db}
+.lbempty{padding:28px;text-align:center;color:#adb5bd;font-size:0.85rem;font-weight:700;line-height:2}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes popIn{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.bounce{animation:bounce .5s}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<!-- Rules Modal -->
+<div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <div class="modal-title">📖 Правила игры</div>
+    <div class="rule-item">
+      <div class="rule-num">1</div>
+      <div class="rule-text">Перед тобой таблица с <b>цифрами, буквами или их смесью</b> — они расставлены в случайном порядке.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">2</div>
+      <div class="rule-text">Нажми на первый элемент — <b>таймер запустится</b>. Находи элементы <b>строго по порядку</b> как можно быстрее!</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">3</div>
+      <div class="rule-text">Нажал <b>не туда</b> — клетка мигнёт красным. Не страшно, просто ищи дальше!</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">4</div>
+      <div class="rule-text">Нашёл все — получи <b>звёздочки</b> за скорость и сохрани результат в <b>таблицу рекордов 🏆</b></div>
+    </div>
+    <div class="modes-legend">
+      <div style="color:#868e96;font-size:0.65rem;font-weight:800;letter-spacing:2px;margin-bottom:10px">РЕЖИМЫ ИГРЫ</div>
+      <div class="mleg-row"><span style="font-size:1.1rem">🔢</span><span style="font-size:0.82rem;font-weight:700;color:#495057"><b>Цифры</b> — нажимай 1, 2, 3, 4…</span></div>
+      <div class="mleg-row"><span style="font-size:1.1rem">🔤</span><span style="font-size:0.82rem;font-weight:700;color:#495057"><b>Буквы</b> — нажимай А, Б, В, Г…</span></div>
+      <div class="mleg-row"><span style="font-size:1.1rem">🎯</span><span style="font-size:0.82rem;font-weight:700;color:#495057"><b>Вместе</b> — чередуй: <b>1 → А → 2 → Б</b>…</span></div>
+    </div>
+    <div class="tip-box">
+      <span style="font-size:0.82rem;font-weight:700;color:#c2255c">💡 Совет: смотри в центр таблицы и замечай нужный элемент боковым зрением — это тренирует внимание!</span>
+    </div>
+    <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">Понятно, играть! 🚀</button>
+  </div>
+</div>
+
+<script>
+const GRIDS=[
+  {id:"4x3",label:"4 × 3",cols:4,rows:3},
+  {id:"4x5",label:"4 × 5",cols:4,rows:5},
+  {id:"5x5",label:"5 × 5",cols:5,rows:5},
+  {id:"6x6",label:"6 × 6",cols:6,rows:6},
+];
+const MODES=[
+  {id:"numbers",ico:"🔢",label:"Цифры",desc:"Найди 1, 2, 3… по порядку"},
+  {id:"letters",ico:"🔤",label:"Буквы",desc:"Найди А, Б, В… по алфавиту"},
+  {id:"mixed",  ico:"🎯",label:"Вместе",desc:"Чередуй: цифра → буква → цифра"},
+];
+const RU="АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЭЮЯ";
+let S={screen:"home",grid:GRIDS[2],mode:MODES[0],name:"",items:[],found:[],bad:-1,next:0,startTs:0,elapsed:0,result:0,saved:false,saving:false,board:[],bGrid:GRIDS[2],bMode:MODES[0],bLoad:false,raf:null};
+
+function fmt(ms){const s=Math.floor(ms/1000),d=Math.floor((ms%1000)/100),m=Math.floor(s/60);return m>0?`${m}м ${s%60}.${d}с`:`${s}.${d}с`;}
+function stars(ms,total){const avg=total*2000;if(ms<avg*0.5)return"⭐⭐⭐";if(ms<avg*0.8)return"⭐⭐";return"⭐";}
+function gen(cols,rows,mode){
+  const n=cols*rows;let a=[];
+  if(mode==="numbers")a=Array.from({length:n},(_,i)=>({v:String(i+1),t:"n",o:i}));
+  else if(mode==="letters")a=Array.from({length:n},(_,i)=>({v:RU[i%RU.length],t:"l",o:i}));
+  else{const nums=Math.ceil(n/2),lets=Math.floor(n/2);for(let i=0;i<nums;i++)a.push({v:String(i+1),t:"n",o:i*2});for(let i=0;i<lets;i++)a.push({v:RU[i],t:"l",o:i*2+1});a.sort((x,y)=>x.o-y.o);}
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+async function lbLoad(gid,mid){try{const r=await window.storage.list(`s:${gid}:${mid}:`,true);const e=[];for(const k of(r?.keys||[])){try{const x=await window.storage.get(k,true);if(x)e.push(JSON.parse(x.value));}catch{}}e.sort((a,b)=>a.ms-b.ms);return e.slice(0,15);}catch{return[];}}
+async function lbSave(gid,mid,name,ms){const k=`s:${gid}:${mid}:${Date.now()}_${Math.random().toString(36).slice(2)}`;await window.storage.set(k,JSON.stringify({name,ms,date:new Date().toLocaleDateString("ru"),ts:Date.now()}),true);}
+function tick(){S.elapsed=Date.now()-S.startTs;render();S.raf=requestAnimationFrame(tick);}
+function stopTimer(){cancelAnimationFrame(S.raf);}
+function showRules(){document.getElementById('modal').style.display='flex';}
+
+const app=document.getElementById("app");
+function render(){
+  if(S.screen==="home")app.innerHTML=rHome();
+  else if(S.screen==="game")app.innerHTML=rGame();
+  else if(S.screen==="result")app.innerHTML=rResult();
+  else app.innerHTML=rBoard();
+  bind();
+}
+
+function rHome(){return`
+<div class="toprow">
+  <div><div class="logo">ШУЛЬТЕ<span>!</span></div><div class="sub">🧠 ТРЕНИРУЙ ВНИМАНИЕ</div></div>
+  <div class="topbtns">
+    <button class="btn-rules" id="brules">📖 Правила</button>
+    <button class="btn-sm" id="gob">🏆 Рейтинг</button>
+  </div>
+</div>
+<div class="sec"><div class="lbl">👤 Твоё имя</div><input id="ni" placeholder="Введи своё имя…" value="${S.name}"></div>
+<div class="sec"><div class="lbl">📐 Размер поля</div>
+  <div class="row4">${GRIDS.map(g=>`<button class="chip${S.grid.id===g.id?" on":""}" data-g="${g.id}">${g.label}</button>`).join("")}</div>
+</div>
+<div class="sec"><div class="lbl">🎮 Режим игры</div>
+  <div class="modes">${MODES.map(m=>`<button class="mchip${S.mode.id===m.id?" on":""}" data-m="${m.id}"><span class="ico">${m.ico}</span><div><div class="mt">${m.label}</div><div class="md">${m.desc}</div></div></button>`).join("")}</div>
+</div>
+<button class="btn" id="go">🚀 НАЧАТЬ ИГРУ!</button>`;}
+
+function rGame(){
+  const{items,found,bad,next,grid,mode,elapsed,startTs}=S;
+  const total=items.length,ni=items.find(x=>x.o===next);
+  const fs=grid.cols>=6?"0.82rem":grid.cols===5?"0.95rem":"1.05rem";
+  return`
+<div class="topbar">
+  <div><div style="color:#3b5bdb;font-weight:900;font-size:0.9rem">${grid.label} · ${mode.ico} ${mode.label}</div><div style="color:#adb5bd;font-size:0.7rem;font-weight:700">${S.name}</div></div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="btn-rules" style="padding:6px 10px;font-size:0.75rem" id="brules">📖</button>
+    <div style="text-align:right"><div class="timer${startTs?" run":""}">${fmt(elapsed)}</div><div style="color:#adb5bd;font-size:0.72rem;font-weight:800">${found.length} / ${total}</div></div>
+  </div>
+</div>
+<div class="pgbar"><div class="pgfill" style="width:${found.length/total*100}%"></div></div>
+<div class="hint">${!startTs?"👆 Нажми на первый элемент — таймер запустится!":`Найди: <b>${ni?.v}</b>${mode.id==="mixed"?` <span style="color:#adb5bd;font-size:0.72rem">(${next%2===0?"цифру":"букву"})</span>`:""}`}</div>
+<div class="grid" style="grid-template-columns:repeat(${grid.cols},1fr)">
+${items.map((it,i)=>{const iF=found.includes(i),iB=bad===i;return`<div class="cell${iF?" done":""}${iB?" bad":""}${it.t==="l"&&!iF?" let":""}" data-i="${i}" style="font-size:${fs}">${iF?"✓":it.v}</div>`;}).join("")}
+</div>
+<button class="btn2" id="bk">← Настройки</button>`;}
+
+function rResult(){
+  const{result,name,grid,mode,saved,saving,items}=S;
+  return`
+<div style="text-align:center;margin-bottom:20px">
+  <div class="stars bounce">${stars(result,items.length)}</div>
+  <div style="font-weight:900;font-size:1.9rem;color:#3b5bdb">МОЛОДЕЦ, ${name.split(" ")[0].toUpperCase()}!</div>
+  <div style="color:#adb5bd;font-size:0.78rem;font-weight:700;margin-top:4px">${grid.label} · ${mode.ico} ${mode.label}</div>
+</div>
+<div class="resbox">
+  <div style="color:#adb5bd;font-size:0.65rem;font-weight:800;letter-spacing:2px;margin-bottom:6px">⏱ ТВОЁ ВРЕМЯ</div>
+  <div class="resbig">${fmt(result)}</div>
+  <div style="color:#ced4da;font-size:0.78rem;font-weight:700;margin-top:4px">${name}</div>
+</div>
+${saved?`<div class="ok">🎉 Результат сохранён в рейтинг!</div>`:`<button class="btn" id="sv" ${saving?"disabled":""} style="${saving?"opacity:.6":""}">${saving?"Сохраняем…":"💾 Сохранить в рейтинг"}</button>`}
+<button class="btn" id="re" style="background:linear-gradient(135deg,#f03e3e,#e03131);margin-top:8px;box-shadow:0 4px 14px rgba(240,62,62,.3)">↺ Ещё раз!</button>
+<button class="btn2" id="bk">← Изменить настройки</button>
+<button class="btn2" id="gob">🏆 Посмотреть рейтинг</button>`;}
+
+function rBoard(){
+  const{board,bGrid,bMode,bLoad}=S;
+  return`
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+  <div style="font-weight:900;font-size:1.5rem;color:#3b5bdb">🏆 Рейтинг</div>
+  <button class="btn-sm" id="bk">← Назад</button>
+</div>
+<div class="sec">
+  <div class="lbl">📐 Сетка</div>
+  <div class="row4" style="margin-bottom:10px">${GRIDS.map(g=>`<button class="chip${bGrid.id===g.id?" on":""}" data-bg="${g.id}">${g.label}</button>`).join("")}</div>
+  <div class="lbl">🎮 Режим</div>
+  <div class="row3">${MODES.map(m=>`<button class="chip${bMode.id===m.id?" on":""}" data-bm="${m.id}">${m.ico} ${m.label}</button>`).join("")}</div>
+</div>
+<div class="lbtable">
+  <div class="lbhead"><span>#</span><span>Имя</span><span style="text-align:right">Время</span><span style="text-align:right">Дата</span></div>
+  ${bLoad?`<div class="lbempty">⏳ Загружаем…</div>`:board.length===0?`<div class="lbempty">🎮 Нет результатов пока.<br>Сыграй первым!</div>`:board.map((e,i)=>`
+  <div class="lbrow${i===0?" top1":""}">
+    <span style="font-weight:900;font-size:0.9rem">${i===0?"🥇":i===1?"🥈":i===2?"🥉":`<span style="color:#ced4da">${i+1}</span>`}</span>
+    <span style="color:${i<3?"#1a1a2e":"#868e96"};font-size:0.88rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</span>
+    <span style="color:${i===0?"#3b5bdb":"#495057"};font-weight:900;font-size:0.95rem;text-align:right">${fmt(e.ms)}</span>
+    <span style="color:#ced4da;font-size:0.65rem;font-weight:700;text-align:right">${e.date}</span>
+  </div>`).join("")}
+</div>`;}
+
+function bind(){
+  const ni=document.getElementById("ni");
+  if(ni)ni.addEventListener("input",e=>S.name=e.target.value);
+  document.querySelectorAll("[data-g]").forEach(b=>b.addEventListener("click",()=>{S.grid=GRIDS.find(g=>g.id===b.dataset.g);render();}));
+  document.querySelectorAll("[data-m]").forEach(b=>b.addEventListener("click",()=>{S.mode=MODES.find(m=>m.id===b.dataset.m);render();}));
+  document.querySelectorAll("[data-bg]").forEach(b=>b.addEventListener("click",()=>{S.bGrid=GRIDS.find(g=>g.id===b.dataset.bg);doRefreshBoard();}));
+  document.querySelectorAll("[data-bm]").forEach(b=>b.addEventListener("click",()=>{S.bMode=MODES.find(m=>m.id===b.dataset.bm);doRefreshBoard();}));
+  document.querySelectorAll("#brules").forEach(b=>b.addEventListener("click",()=>document.getElementById('modal').style.display='flex'));
+  const go=document.getElementById("go");
+  if(go)go.addEventListener("click",()=>{
+    if(!S.name.trim()){const inp=document.getElementById("ni");if(inp){inp.style.borderColor="#ff6b6b";inp.placeholder="Сначала введи имя! 👆";setTimeout(()=>{inp.style.borderColor="#dee2e6";inp.placeholder="Введи своё имя…";},1200);}return;}
+    S.items=gen(S.grid.cols,S.grid.rows,S.mode.id);S.found=[];S.bad=-1;S.next=0;S.startTs=0;S.elapsed=0;S.saved=false;S.result=0;S.screen="game";render();
+  });
+  document.querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
+    const i=parseInt(c.dataset.i);if(S.found.includes(i)||S.bad===i)return;
+    const it=S.items[i];
+    if(it.o!==S.next){S.bad=i;render();setTimeout(()=>{S.bad=-1;render();},400);return;}
+    if(!S.startTs){S.startTs=Date.now();S.raf=requestAnimationFrame(tick);}
+    S.found=[...S.found,i];S.next++;
+    if(S.found.length===S.items.length){stopTimer();S.result=S.elapsed;setTimeout(()=>{S.screen="result";render();},200);}
+    else render();
+  }));
+  document.querySelectorAll("#bk").forEach(b=>b.addEventListener("click",()=>{stopTimer();S.screen="home";render();}));
+  const re=document.getElementById("re");
+  if(re)re.addEventListener("click",()=>{S.items=gen(S.grid.cols,S.grid.rows,S.mode.id);S.found=[];S.bad=-1;S.next=0;S.startTs=0;S.elapsed=0;S.saved=false;S.result=0;S.screen="game";render();});
+  const sv=document.getElementById("sv");
+  if(sv)sv.addEventListener("click",async()=>{if(S.saving||S.saved)return;S.saving=true;render();await lbSave(S.grid.id,S.mode.id,S.name,S.result);S.saving=false;S.saved=true;render();});
+  document.querySelectorAll("#gob").forEach(b=>b.addEventListener("click",()=>{S.bGrid=S.grid;S.bMode=S.mode;doOpenBoard();}));
+}
+
+async function doOpenBoard(){S.screen="board";S.bLoad=true;S.board=[];render();S.board=await lbLoad(S.bGrid.id,S.bMode.id);S.bLoad=false;render();}
+async function doRefreshBoard(){S.bLoad=true;S.board=[];render();S.board=await lbLoad(S.bGrid.id,S.bMode.id);S.bLoad=false;render();}
+
+render();
+</script>
+</body>
+</html>
